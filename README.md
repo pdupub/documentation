@@ -3,8 +3,8 @@
 Parallel Digital Universe - A decentralized identity-based social network
 
 ## PDU White Paper
-- [English](TechnicalWhitePaper.md)
-- [Chinese](zh-CN/TechnicalWhitePaper.md) 
+- [English](WhitePaper.md)
+- [Chinese](zh-CN/WhitePaper.md) 
 
 ## PDU Roadmap
 - [English](Roadmap.md)
