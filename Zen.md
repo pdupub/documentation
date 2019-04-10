@@ -1,6 +1,6 @@
 ### Sequence comes from reference.
 
-### Your spacetime is decided by your choice.
+### Spacetime is decided by your choice.
 
 ### Time flows like a river.
 
