@@ -11,7 +11,7 @@ Parallel Digital Universe - A decentralized identity-based social network
 - Chinese
 
 ## Zen of PDU
-- English
+- [English](Zen.md)
 - [Chinese](zh-CN/Zen.md) 
 
 ## Website
