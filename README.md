@@ -8,7 +8,7 @@ Parallel Digital Universe - A decentralized identity-based social network
 
 ## PDU Roadmap
 - English
-- [Chinese](zh-CN/Roadmap.md) 
+- Chinese
 
 ## Zen of PDU
 - English
