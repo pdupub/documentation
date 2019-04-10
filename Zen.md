@@ -1,7 +1,7 @@
-### 引用产生客观有序
+### Sequence comes from reference.
 
-### 存在基于主观选择
+### Your spacetime is decided by your choice.
 
-### 时间不可逆
+### Time flows like a river.
 
-### 有限的生命，无限的延续
+### Finite Life, infinite growth.
