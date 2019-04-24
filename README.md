@@ -16,3 +16,7 @@ Parallel Digital Universe - A decentralized identity-based social network
 
 ## Website
 http://pdu.pub
+
+
+
+<a href="https://pdu.pub"><img height="32" align="right" src="https://pdu.pub/assets/images/icon.svg"></a>
