@@ -1,8 +1,9 @@
 # PDU 一种基于去中心化账户系统的社交网络
 Parallel Digital Universe - A decentralized identity-based social network
 
-email: hello@pdu.pub
-wechat: pengpengt00
+* email: hello@pdu.pub
+* wechat: pengpengt00
+* twitter: [@PDUPUB](https://twitter.com/pdupub)
 
 [![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
 [![Chat](https://img.shields.io/badge/gitter-Docs%20chat-4AB495.svg)](https://gitter.im/pdupub/Welcome)
