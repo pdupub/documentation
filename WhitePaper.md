@@ -1,254 +1,299 @@
 # PDU - A decentralized identity-based social network
-Parallel Digital Universe 一种基于去中心化账户系统的社交网络
 
-email: hello@pdu.pub
-wechat: pengpengt00
+This copy is translated by [Google Translate](https://translate.google.com/) [中文白皮书](https://github.com/pdupub/Documentation/blob/master/zh-CN/WhitePaper.md)
+
+* email: hello@pdu.pub
+* wechat: pengpengt00
+* twitter: [@PDUPUB](https://twitter.com/pdupub)
 
 [![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
 [![Chat](https://img.shields.io/badge/gitter-Docs%20chat-4AB495.svg)](https://gitter.im/pdupub/Welcome)
 
-**Abstract:** 通常意义上的社交网络服务(SNS)，如Facebook、twitter、微信，用户可以在其上创建身份，维护关系并进行信息传播、交互。但现有的SNS均依赖于某个第三方提供的中心化的网络服务，这使得其很容易被控制或封锁隔离。BitTorrent协议，能够实现P2P的信息传播，但其根本目的是提高对于已知内容的传播效率，其弱化的账户系统设计不利于使用者对未知内容有所判别。对于去中心化的系统，即便用数字签名能够证明每个信息的来源，但是因为缺少第三方验证（如手机号注册）来给予账户创建成本，即便无用的信息充斥整个网络也无法信息来源进行惩罚。
+** Abstract: ** Social network services (SNS), such as Facebook, twitter, and WeChat etc, which users can create identities on the platform, maintain connections and exchange information with each other. However, those SNS rely on a centralized network service provided by the company or organization, which makes it easy to be controlled or blocked. The BitTorrent protocol can implement P2P information exchange, but its original purpose is to improve the transmission efficiency of known data, and its weakened account system design is not suitable for uncertain information exchange. For a decentralized system, even if a digital signature can prove the source of each information, due to the lack of third-party verification (such as mobile phone number registration) to give account creation costs, the useless information will flood the entire network easily, the information source cannot be punished.
 
-我们提出一种在纯粹P2P的环境下给予账户创建成本的方式，并基于这种账户系统，构建完整的P2P社交网络形态。首先，我们引入的时间证明，用以证明某个特定行为发生于某时刻之后。然后，在系统中新账户的创建必须由多个已存在的合法账号联合签名，并规定同一账号的此类签名操作需满足时间间隔。每个账户系统的使用者（包括非用户），都在本地以DAG的结构维护部分或全部账号之间的关系拓扑，并随时可以根据自己获知的消息，对新的账号进行验证增补，同时也可因作恶行为对某些账号及关联账号进行惩罚。
-
-与比特币为代表的区块链不同，系统的使用者并不需要对每个行为产生共识，维护同一个一致的信息。系统中的每个用户都只需要维护和自己使用相关的账户部分和信息，并且根据自己的标准对于关系拓扑中的账户做出是否接受其信息的判断。
+We propose a way to make sure account creation costs in a pure P2P environment, and based on this account system, build a complete P2P social network. First, we construct an order by reference to prove that a particular behavior occurs after a certain behavior, that is time proof. Then, the time interval between the creation of a new account must be jointly confirmed by multiple existing legal accounts and such confirmation of the same account must be met. Users (including non-users) of each account system can maintain the relationship topology between some or all of the accounts of the DAG structure. new accounts can be verified at any time based on the information they have learned. Evil acts punish certain accounts and related accounts. Users do not need to agree on all behaviors, nor do they need to maintain consistent information.
 
 <!-- MarkdownTOC depth=4 autolink=true bracket=round list_bullets="-*+" -->
 - [Introduction](#introduction)
-  * [Background](#background) 
+  * [Background](#background)
   * [PDU](#pdu)
 - [Message](#message)
   * [Message Credit](#message-credit)
   * [Message Sequence](#message-sequence)
   * [Time Proof](#time-proof)
   * [Spacetime](#spacetime)
-- [Account Topology](#account-topology) 
-  * [亲源关系](#亲源关系)
-  * [生命周期](#生命周期)
-  * [自然法则](#自然法则)
-  * [Cosigned Birth](#cosigned-birth)
-- [Network](#network)
+- [Account Topology](#account-topology)
+  * [Family relationship](#family-relationship)
+  * [Life Cycle](#life-cycle)
+  * [Natural Law](#natural-law)
+  * [Account Creation](#account-creation)
+-[Currency system](#currency-system)
+  * [Scope](#Scope)
+  * [Equity Attribution](#equity-attribution)
+  * [Anonymous Transaction](#anonymous-transaction)
+  * [Evolution of DPOS](#evolution-of-DPOS)
+  * [POW compatible](#POW-compatible)
+-[Network](#network)
   * [Network Model](#network-model)
     + [Account Location](#account-location)
-    + [Message Distance](#message-distance)
-  * [Message Spread](#message-spread)
-- [Timeline of PDU Evolution](#timeline-of-pdu-evolution)
-- [Function Node](#function-node)
-  * [Time Proof Node](#time-proof-node)
-  * [Account Node](#account-node)
-  * [Tracker Node](#tracker-node)
-  * [Message Node](#message-node)
-- [Conclusion](#conclusion)
+    + [Message Space-time Distance](#message-space-time-distance)
+  * [Message Propagation](#message-propagation)
+  * [Function Node](#function-node)
+    + [Time Proof Node](#time-proof-node)
+    + [Account Information Node](#account-information-node)
+    + [Account Status Node](#account-status-node)
+    + [Message Distribution Node](#message-distribution-node)
+-[World Creation Process](#world-creation-process)
+-[Conclusion](#Conclusion)
 <!-- /MarkdownTOC -->
+
 
 ## Introduction
 
 ### Background
 
-现今互联网上的信息传播、交互大多依赖于一个强大可信的第三方中心化服务，如Facebook、Twitter、微信、微博等社交网络服务。其存在毋庸置疑给使用者带来了极大的便利，但随着其逐步发展，中心化社交服务的问题也逐渐显露。
+Most information dissemination and interaction on the Internet today rely on a powerful and trusted third-party centralized service, such as social networking services such as Facebook, Twitter, WeChat, and Weibo. Its existence has undoubtedly brought great convenience to users, but with its gradual development, the problem of centralized social services has gradually emerged.
 
-1. 无论有意或无意，第三方服务都存在越权使用用户信息或者造成用户数据泄露的可能。(FB)
-2. 出于商业的考量，中心化的服务商会利用自身强大的用户基础，来打压竞品，如限制其产品的信息在自有平台上传播，以维护自身的垄断地位。(Wechat)
-3. 中心化的服务容易受制于政府的监管，封锁。(GFW)
+1. Whether intentionally or unintentionally, there is a possibility that third-party services may use user information or cause leakage of user data. (FB)
+2. For commercial considerations, centralized service providers will use their strong user base to suppress competing products, such as restricting the spread of information about their products on their own platforms to maintain their monopoly position. (Wechat)
+3. Centralized services are subject to government supervision and blockades. (GFW)
 
-但即便如此，由于对于三方中心化服务的依赖，很多用户依然不得已选择继续使用发生问题的服务，而非迁移自己的数据。因为对于大多数用户而言，离开某个平台虽然不会损失自己的数据信息，但却失去了在此平台上长期积累的用户关系和自身在此平台信用值。
+But even so, due to the reliance on three-party centralized services, many users still have to choose to continue to use the service that has the problem instead of migrating their own data. Because for most users, although leaving a certain platform will not lose their own data and information, they will lose the long-term user relationship accumulated on this platform and their own credit value on this platform.
 
-本质上来说，这个问题根源在于用户群体自身并不能构成一个脱离某第三方的网络，所以用户的关系信息归属于平台而非其自身。
+In essence, the root of this problem is that the user group itself cannot form a network that is separated from a third party, so the user's relationship information belongs to the platform rather than itself.
 
 ### PDU
 
-我们提出一种新的基于去中心化账户系统的社交网络（PDU）的本意也并排除第三方的中心化服务，而是希望能够通过去中心化账户系统（DID）的实现，能够将用户身份确认及关系拓扑脱离于某个特定平台，用以消除用户对于特定第三方中心化服务的依赖，让用户的身份及社交关系真正归属于用户。
+We propose a new type of social network (PDU) based on a decentralized account system, which also excludes third-party centralized services. Instead, we hope that through the implementation of the decentralized account system (DID), the user identity can be The confirmation and relationship topology is separated from a specific platform to eliminate the user's dependence on a specific third-party centralized service, so that the user's identity and social relationships truly belong to the user.
 
-如同**双花**可被认为是去中心化的货币系统需要解决的根本问题，一个去中心化的账户系统要解决的根本问题是如何给账户的创建赋予必要**成本**，使其可控。
+Just as ** double spend ** can be considered as the fundamental problem to be solved in a decentralized currency system, the fundamental problem to be solved in a decentralized account system is how to give the necessary ** costs ** to account creation, so that Its controllable.
 
-我们仿照自然及社会，首先引入时间证明的概念，并以此为基础订立自然法则。符合自然法则创建的新账户才有可能被系统中的其他用户（部分用户）所接受。每个用户自身都可用有向无环图（DAG）的结构来维护自身所**承认**的所有用户及其构成的亲源拓扑关系。任何违背自然法则的消息都会作为证据在网络中传播，让消息接受者可以根据本地的亲源拓扑对作恶的用户进行惩罚。惩罚的账户亲源深度、广度由接受者自行决定。
+We modeled nature and society, first introduced the concept of time proof, and based on this we formulated the laws of nature. New accounts created in accordance with the laws of nature may be accepted by other users (some users) in the system. Each user can use the structure of a directed acyclic graph (DAG) to maintain all the users he ** recognizes ** and the parent-source topological relationship they constitute. Any message that violates the laws of nature will be transmitted as evidence in the network, allowing the message receiver to punish the malicious user according to the local source-source topology. The depth and breadth of the source of the punishment account shall be determined by the recipient.
 
-与传统中心化服务的账户系统不同，PDU的自然法则还基于时间证明定义了账户的生命周期，使得不被使用的账户可以被自然淘汰，账户的总数量呈线性增长（受时间流速的影响会），而当前生命周期内的用户数量会近似恒定。
+Different from the traditional centralized service account system, the natural law of PDU also defines the life cycle of the account based on time proof, so that unused accounts can be naturally eliminated, and the total number of accounts increases linearly. ), And the number of users in the current life cycle will be approximately constant.
 
-时间证明是PDU中用户一切行为成本控制的基础，但因为PDU中没有强制的共识，取而代之的是用户自身的选择，所以完全可能有多个不同的时间证明的存在。PDU接受这种情况的存在，就如同平时存在的多个时空，甚至每个时空可以设定不同的时间流速来影响本时空中的行为成本。同时，任何用户也可同时存在于自己选择的多个时空当中。	
+Proof of time is the basis of cost control for all actions of users in the PDU, but because there is no mandatory consensus in the PDU, it is the user's own choice, so it is entirely possible that there are multiple different time proofs. PDU accepts the existence of this situation, just like multiple space-times that usually exist, and even each space-time can set a different time flow rate to affect the behavioral cost of this space-time. At the same time, any user can exist in multiple time and space of his choice.
 
 ## Message
 
-消息（Message）在PDU中特指附带数字签名的信息，这种简单的结构是构建P2P网络结构的基础。
+Message specifically refers to the information with digital signature in the PDU. This simple structure is the basis for constructing a P2P network structure.
 
-账户（及其使用者）能且只能通过发送消息这唯一形式来实现所有的网络行为。如果单纯从信息传播的角度看待这个网络的话，那么一个账户的实时价值可由其每生产一条消息的到达范围（被多少个账户所接受）所衡量。
+Accounts (and their users) can and can only implement all network behaviors in the sole form of sending messages. If this network is viewed purely from the perspective of information dissemination, the real-time value of an account can be measured by the reach (how many accounts are accepted) of each message it produces.
 
-每条消息是否能够被某个账号所接受（不同于接收到信息，接受表示接收到的信息通过验证，被认为合法），完全由接受者决定。所以，每个账户通过对于所接受信息的选择，构建了自身视角中的整个PDU网络。或者说，账号自身所接受的信息范围，确定了这个账号所存在的时空。
+Whether each message can be accepted by an account (different from the information received, acceptance means that the received information is verified and considered legal) is entirely up to the recipient. Therefore, each account constructs the entire PDU network from its perspective through the selection of the received information. In other words, the range of information accepted by the account itself determines the time and space of the account.
 
-消息的内容可以包含其他的一个或者多个消息，甚至多层嵌套，我们称之为**引用**。
+The content of a message can contain one or more other messages, or even multiple levels of nesting, which we call ** references ** .
 
-### Message Credit 
+### Message Credit
 
-既然每个账户所生产的信息是否被接收，或者说其传播程度完全由接受者决定，而并非存在一个特定的中心化三方平台来保证消息的传播，也不存在共识机制来保证整个P2P的网络都认可接收或拒绝接收某个信息。那对于是否接收某个新的消息的判断依据，来源于自身主观认定的消息来源账号的信用度和那条消息本身的可信程度及实时性。而信息的生产者，为了所生产的信息有更大传播范围，自然会去尽力符合PDU系统规则（取悦受众），以提高消息可信度。
+Since the information produced by each account is received, or the degree of its spread is completely determined by the recipient, there is no specific centralized three-party platform to ensure the spread of the message, and there is no consensus mechanism to ensure the entire P2P network Both agree to accept or reject a message. The basis for judging whether or not to receive a new message comes from the subjective determination of the creditworthiness of the source account and the credibility and real-time nature of the message itself. The producers of information will naturally try their best to comply with the rules of the PDU system (pleasing the audience) in order to increase the spread of the produced information to improve the credibility of the message.
 
-由于数字签名技术的存在，即便在P2P的网络环境中，账户之间依然能够很容易确认信息的来源，但如何确定信息的其他属性呢？我们发现在真实的世界中，我们对于信息的判断往往会有一个下意识的辨别条件，就是时间。当一个个体分别与两个个体产生两个相互冲突的约定时，我们会以先发生的约定为准，并判定造成冲突的个体不可信。当我们收到关于某个件事的多个信息时，我们会根据最新的信息来更新我们所认为的事件当前状态。我们习惯于如此判断是因为时间具有单向性，这种性质给予信息一种有序性，而我们的判断本质上则是依托于此。
+Due to the existence of digital signature technology, even in a P2P network environment, the source of information can still be easily confirmed between accounts, but how to determine other attributes of the information? We find that in the real world, our judgment of information often has a subconscious discrimination condition, which is time. When an individual produces two conflicting agreements with two individuals, we will take the agreement that occurred first and determine that the individual that caused the conflict is not credible. When we receive multiple information about an event, we update what we think is the current state of the event based on the latest information. We are used to making such judgments because time is unidirectional, which gives information an orderly nature, and our judgments are essentially based on this.
 
 ### Message Sequence
 
-首先PDU中并非所有消息都必须是有序的，也并非每个账户都需要将自己所生产的消息构建为有序的形式。但作为整个PDU来讲，因为消息本身的内容可以引用其他的消息，所以当上述情况发生时，自然就会为消息赋予有序性，我们可以认为被引用的消息一定发生在引用他的消息之前。
+First of all, not all messages in the PDU must be ordered, and not every account needs to construct the messages it produces into an ordered form. But as a whole PDU, because the content of the message itself can refer to other messages, when the above situation occurs, it will naturally give order to the message. We can think that the quoted message must occur before the message that references it. .
 
-当在PDU中，一个账号的每一个新的消息，都引用本账号的前一条消息时，自然会构成一个本账号的消息队列，我们称这样一个消息序列为具有自证有序性。但这样产生的问题是，新的消息会包含以前所有的全部内容，造成消息内容越来越庞大。在实际应用中，我们可以用消息内容的hash值来代替消息内容进行引用。
+When each new message of an account in the PDU refers to the previous message of the account, it will naturally constitute a message queue of the account. We call such a message sequence self-certified and orderly. However, the problem that arises is that the new message will contain all the content of the previous one, resulting in an increasing content of the message. In practical applications, we can use the hash value of the message content instead of the message content for reference.
 
-在现实世界中，我们如果想证明某件事发生在某个时间之后，最简单的方式是找一张当天的报纸，然后一起拍照。公布这张照片，对于大众而言显然比公布你的日记更有说服力。所以在PDU中，任何消息也可以引用其他账户（更被信任）的消息，来证明自身所发布消息的有序性。我们可以称这种方式为他证有序性。
+In the real world, if we want to prove that something happened after a certain time, the easiest way is to find a newspaper of the day and take a picture together. Publishing this picture is obviously more persuasive to the public than publishing your diary. Therefore, in the PDU, any message can also refer to messages from other accounts (more trusted) to prove the orderliness of the messages issued by itself. We can call this method the order of evidence.
 
-因为每个消息都可以引用多条消息，所以为了提升自身的有序性可信度，一条消息中可以包含自证有序的引用和多条他证有序的引用。
+Because each message can refer to multiple messages, in order to improve its orderly credibility, a message can contain self-certified and orderly references and multiple other orderly references.
 
-### Time Proof 
+### Time Proof
 
-严格来讲，任何账户发布的任何消息都可以都可以作为时间证明被其自身或者其他账号所引用。但在实际使用过程中会有如下的问题：
-1. 如果消息发布不够频繁，则会影响引用其作证的时间精度。
-2. 如果过于频繁，则会降低依赖此时间证明的账号创建成本。
-3. 如果消息可以被发布者完全掌握，则会影响其使用范围。
+Strictly speaking, any message published by any account can be cited by itself or other accounts as proof of time. However, the following problems will occur in actual use:
+1. If a message is published infrequently, it will affect the accuracy of the time it is used to testify.
+2. If it is too frequent, it will reduce the cost of account creation that relies on this time proof.
+3. If the message can be fully grasped by the publisher, it will affect its scope of use.
 
-对于第1点所述情况，账户的拥有者很容易控制自身的消息发布频率，如果其期望成为一个更为被广泛接受的时间证明账户，则提供稳定的服务，按照固定的周期频率来发布消息。（有利于使得本账号被更广泛的接受，提高消息到大范围）
+For the situation described in point 1, the account owner can easily control the frequency of his own news release. If he wants to become a more widely accepted time proof account, he will provide stable services and publish messages at a fixed periodic frequency. . (Conducive to make this account more widely accepted and improve the news to a wide range)
 
-对于第2点所述的影响，我们将在下一个章节中叙述。
+The impact described in point 2 will be described in the next chapter.
 
-对于第3点，账户的拥有者自身应该提出某些消息指定的机制来让其他账户相信自身发布的消息更具有随机性。例如，提供一个对外的接口，任何使用者可通过其提交数据，而账户拥有者将在N到N+1时间内所受到的所有信息放入到N+1时刻发布的消息内容当中。
+Regarding point 3, the account owner should propose a certain message designation mechanism to make other accounts believe that the messages they publish are more random. For example, by providing an external interface, any user can submit data through it, and the account owner puts all the information received in the time from N to N + 1 into the content of the message released at the time of N + 1.
 
-### Spacetime
+### Timespace
 
-不同的时间证明将用于构建不同的时空(spacetime)，所以即便是同一消息包含的多个时间证明的引用，其目的只是用来让此消息在多个时空中均合法，而不意味着多个时间证明之间有怎样的关系。同时，时间证明也未规定相邻两个块之间的真实时间间隔。
+Different time proofs will be used to construct different spacetimes, so even if multiple references to time proofs are included in the same message, the purpose is only to make this message legal in multiple time and space, and does not mean more What is the relationship between this time proof. At the same time, the time proof does not specify the true time interval between two adjacent blocks.
 
-时间证明的选择权在每个使用者，用户可以在行为（消息）中选择一个，多个，或者完全不选择任何时间证明，也可以在自己的多条消息中选择不同的时间证明。但推荐用户尽量选择可信度高的时间证明来为自己的行为设置时间证明，以防止由于发出时间证明的账号的不稳定或者作恶行为影响自己所采用的时间证明的公信力。
+The right to choose time proofs is in each user. Users can choose one, multiple, or no time proofs at all, or they can choose different time proofs in their multiple messages. However, it is recommended that users try to choose a time credible with high credibility to set up a time credential for their actions, in order to prevent the credibility of the time credential they use due to the instability of the account that issued the time credential or malicious behavior.
 
-对于时间证明的发布者而言需要注意：
-1. 此账号发布的消息是否被其他用户作为时间证明而存在，由采用者决定，而不由发布者决定。
-2. 时间证明属于消息，也仅对账户所属时空的其他账户可见。
+For publishers of time proof:
+1. Whether messages posted by this account exist as proof of time by other users is up to the adopter, not the publisher.
+2. The time proof belongs to the message, and it is only visible to other accounts in the time and space to which the account belongs.
 
-## Account Topology
+## Account topology
 
-账户系统是用户在社交网络中一切行为的基础。基于账户，社交关系才得以建立，认证行为能够以发生，用户也才会因为自身的行为而得到奖惩的反馈。当账户系统由一个中心化的平台进行维护的时候，账号的创建过程，使用过程都基这个平台，所以很容易进行控制并有效的限制一些恶意的行为。比如为应单个使用者创建大量账号的行为，平台可通过手机号验证等绑定真实世界信息的方式来增加创建账号的成本。为应对身份冒用，盗取的行为，平台会在注册过程中强制要求用户使用更加复杂的密码，缩短登录的过期时间，加强自身平台的安全等级等方式。为应对用户的恶意行为，平台会指定一些规则条文，当用户触犯某些规则的时候，由平台对用户进行惩罚，这些惩罚的方式并不一定被用户所知晓，比如仅仅减少其信息的露出概率，又比如彻底删除其所有的信息。可见，对于账户系统的控制权利，完全在于其依赖的平台，当此平台完全可信的时候，这是一个很好的解决方案，但是否存在完全可信的中心化平台，答案是显然是否定的。
+The account system is the basis for all user behavior in social networks. Based on the account, social relationships can be established, authentication actions can take place, and users can receive rewards and punishments for their own actions. When the account system is maintained by a centralized platform, the account creation process and use process are based on this platform, so it is easy to control and effectively limit some malicious behaviors. For example, the behavior of creating a large number of accounts for a single user, the platform can increase the cost of creating an account by binding real-world information, such as mobile phone number verification. In order to cope with identity fraud and theft, the platform will force users to use more complex passwords during the registration process, shorten the expiration time of login, and strengthen the security level of their platform. In order to deal with the malicious behavior of users, the platform will specify some rules and regulations. When the user violates certain rules, the platform will punish the user. These punishments are not necessarily known to the user, such as only reducing the probability of revealing their information. , Or delete all its information completely. It can be seen that the control right of the account system lies entirely in the platform on which it depends. When this platform is fully trusted, this is a good solution, but if there is a fully trusted centralized platform, the answer is obviously negative of.
 
-由于数字签名的存在，即便在一个完全P2P的网络环境中，对于信息的认证，保密等均不存在问题。用户的身份基于一个非对称的秘钥对，信息生产者利用私钥对信息进行签名，信息接受者用生产者公钥验证信息来源的真实性。对于加密内容，生产者可以接收者的公钥进行加密之后，再用生产者自身的私钥进行签名，信息接受者收到信息，先用对方公钥进行验证，再用自身的私钥对内容进行解密。
+Due to the existence of digital signatures, even in a completely P2P network environment, there is no problem with information authentication and confidentiality. The user's identity is based on an asymmetric key pair, the information producer uses the private key to sign the information, and the information recipient uses the producer's public key to verify the authenticity of the information source. For encrypted content, the producer can encrypt the recipient's public key, and then use the producer's own private key to sign. The information receiver receives the information, first uses the counterpart's public key to verify, and then uses its own private key to encrypt the content. Decrypt.
 
-但由于作为身份基础的非对称秘钥对创建容易，单一使用者也可以在短时间内创建大量的秘钥对。为在P2P网络环境中，为了控制基于秘钥对的合法账户的数量，增加账户的创建成本，我们基于时间证明，首先提出亲源关系和生命周期两个概念，并在此基础上定义了多条自然法则。P2P网络中的每个用户，都可以依照其对于其他的用户进行判断，选择自己是否接受对方的存在。
+However, due to the easy creation of asymmetric key pairs as the basis of identity, a single user can also create a large number of key pairs in a short time. In the P2P network environment, in order to control the number of legal accounts based on key pairs and increase the cost of account creation, we first proposed two concepts of parent-source relationship and life cycle based on time proof, and defined multiple Laws of nature. Each user in the P2P network can determine whether to accept the existence of the other party according to his judgment of other users.
 
-### 亲源关系
+### Family relationship
 
-亲源关系是指两个账号之间的关系，在PDU中，每个节点所承认的**单一时空**的所有合法账户都存在直接或间接的亲源关系。除创世的两个账号之外，所有的账号均有且只有两个属性不同的父级账号。整个账户体系所构成的关系拓扑是由两个创世端点启始的有向无环图（DAG）
+The parent-child relationship refers to the relationship between two accounts. In the PDU, all legal accounts of ** single space-time ** recognized by each node have direct or indirect parent-child relationships. With the exception of the two genesis accounts, all accounts have and only two parent accounts with different attributes. The relationship topology formed by the entire account system is a directed acyclic graph (DAG) initiated by two genesis endpoints
 
-### 生命周期
+### Life cycle
 
-每个账户有其自己的以时间证明为基础的生命周期，这个账户的生命周期起始于两个异属性节点完成签名，并广播此事件的时间证明。一个账户只有在其生命周期之内生产的消息才能被认为合法。（*由于接受信息的节点会更倾向于时刻新且可信度高的消息，所以在生命周期结束以后，伪造历史消息进行广播的意义并不大。*）
+Each account has its own life cycle based on time proof. The life cycle of this account starts when two different attribute nodes complete the signature and broadcast the time proof of this event. Only messages produced by an account during its lifetime can be considered legitimate. (* Because the node receiving the information will be more inclined to keep up-to-date and highly credible news, after the end of the life cycle, it is not significant to falsify historical messages for broadcasting.
 
-生命周期的长度跟父级账号相关，但不低于某个特定值，那个特定值就是最低生命周期。
+The length of the life cycle is related to the parent account, but it is not lower than a certain value, which is the minimum life cycle.
 
 
-### 自然法则
+### The Law of Nature
 
-1. 每个账户都有一个二元属性，属性值以其公钥的末尾奇偶性确定，创世的两个账户必为异属性账户。
-（*此规定意味着用户可以通过重复生成非对称秘钥对的过程来自己选择此二元化的属性，这个账户系统的次二元化属性不会趋近于统一，因为当一方变得稀有时，由于父级地址的签名规则，所以选择较稀有属性的地址会增多，以增加自身的账户价值。*）
-2. 每个新创的非对称秘钥，需要进行签名过程，被两个合法异属性账户行签名，之后广播到整个P2P网络，才可能被其他账号所认可。
-3. 签名执行的父级地址，在签名包含的时间戳之前，必须已经经历至少1/4个**最低生命周期**。
-4. 签名执行的父级地址，在签名包含的时间戳之前，必须至少有1/4的**最低生命周期**内，没有进行过其他的创建新账号签名。
-5. 两个执行签名的异属性账户前后进行签名，第二个签名的内容需包含第一个签名。
-（*暂时并未强制两个异属性父级地址的签名顺序，但有可能在以后的自然法则定义中有所扩展，进一步提高创建账户的成本*）
-6. 生命周期的长度跟父级账号相关，可定义为父级账户中生命周期较长的账号的1/2，但不低于最低生命周期。
-（*关于生命周期的设定，有利于在整个系统诞生初始，通过对于时间证明的流速的控制，加速系统账号的扩展，同时在系统账号达到一定数量时，控制当前所有活跃账号的数量。*）
-7. 子账户的生命周期，从执行签名的第二个父账户完成签名是，账户中包含的时间证明开始计算。
-8. 两个执行签名的父级地址，不能为直接或间接的父子关系账户。
-（*引入这个法则计算账户的公开地址过程中算法上的考虑，但也可以将其理解为，在创建新的账户过程中，我们必须要引入新的基因。*）
+1. Each account has a binary attribute. The attribute value is determined by the end parity of its public key. The two accounts of creation must be different attribute accounts.
+(* This provision means that users can choose this binary attribute by repeating the process of generating asymmetric key pairs. The secondary binary attribute of this account system will not approach uniformity, because when one party becomes rare At this time, due to the signature rules of the parent address, more rare addresses will be selected to increase their account value. *)
+2. Each newly created asymmetric key needs to undergo a signing process, be signed by two legally different attribute account lines, and then broadcast to the entire P2P network before it can be recognized by other accounts.
+3. The parent address of the signature execution must have experienced at least 1/4 of the minimum lifetime before the timestamp contained in the signature.
+4. The parent address of the signature execution must have at least 1/4 of the ** minimum life cycle ** before the time stamp included in the signature, and no other new account signatures have been created.
+5. The two signature accounts with different attributes are signed before and after, and the content of the second signature must include the first signature.
+(* The order of signatures of two different attribute parent addresses is not enforced for the time being, but it may be expanded in the definition of natural law in the future to further increase the cost of creating an account *)
+6. The length of the life cycle is related to the parent account, which can be defined as 1/2 of the account with a longer life cycle in the parent account, but not less than the minimum life cycle.
+(* The setting of the life cycle is conducive to the expansion of the system account through the control of the time-proven flow rate at the beginning of the entire system. At the same time, when the system account reaches a certain number, the number of all currently active accounts is controlled. * )
+7. The life cycle of a child account is calculated from the completion of the signature on the second parent account that executes the signature, the proof of time contained in the account.
+8. Two parent addresses performing signatures cannot be direct or indirect parent-child relationship accounts.
+(* Introduced this algorithm into the calculation of the account's public address, but it can also be understood as, in the process of creating a new account, we must introduce new genes. * )
 
-签名所产生的行为也属于一般消息（Message），其形式，传播方式及可信任程度均同于消息。
+The behavior generated by the signature also belongs to the general message (Message), and its form, transmission method and trustworthiness are the same as the message.
 
-图例待补充……
+Legend to be added ...
 
-### Cosigned Birth
+### Account Creation
 
-创建账户的过程中，生成新账户基本信息的过程通常不会被构造成消息在PDU中传播，因为此时待建账户并不合法，其他的账户不会接受此类消息。cosign过程所需的两个账户，有先后顺序，系统只要求后签名的父级地址将待建账户信息和叠加了两次签名的内容构造成消息（Message），在网络进行广播，第一个签名的地址不必须广播签名消息。但因为两次签名都必须带有时间证明，所以即便某账户在创建账户的过程中为先签名的账户且并没有发出过消息，如果被发现其两次创建账户的签名时间，小于1/4个最低生命周期，依然会被作为证据消息（Evidence Message）进行广播并处罚。
+In the process of creating an account, the process of generating basic account information for a new account is usually not structured such that the message is transmitted in the PDU, because the account to be established at this time is not legal, and other accounts will not accept such messages. The two accounts required by the cosign process have a sequence. The system only requires the parent address of the post-signature to construct the account information to be built and the content superimposed twice into a message, which is broadcast on the network. The first The signed address does not have to broadcast the signed message. However, since the two signatures must be accompanied by time certification, even if an account is the first signed account in the process of creating an account and has not sent a message, if it is found that the signature time of the two account creations is less than 1/4 This minimum life cycle will still be broadcast and punished as an Evidence Message.
 
-账户的创建过程如以下步骤：
-1. 新账户A创建秘钥对，并将A的公钥提供给第一个符合签名条件的账户B进行签名。此过程通常不通过次PDU网络的消息系统，因为新账户A此时对其他账户来说还不合法。
-2. 账户B对A的公钥进行签名之后，可以任何方式，将签名之后的消息提供给另一个签名账户C，C必须和B为异属性账户。
-3. 账户C对B签名之后的消息进行签名，并将此消息进行广播。
-4. 收到广播的节点，会验证B，C的cosign是否合法，如果合法，则将A添加到自身维护的账户关系拓扑图当中。（同样，如果不合法，则收集作恶证据并广播。）
+The account creation process is as follows:
+1. The new account A creates a key pair and provides A's public key to the first account B that meets the signing conditions for signing. This process usually does not pass through the message system of the secondary PDU network, because the new account A is not yet legal for other accounts at this time.
+2. After account B signs A's public key, the signed message can be provided to another signed account C in any way. C and B must be accounts with different attributes.
+3. Account C signs the message signed by B and broadcasts the message.
+4. The node receiving the broadcast will verify whether the cosigns of B and C are legal. If it is legal, add A to the account relationship topology map maintained by itself. (Similarly, if illegal, collect evidence of evil and broadcast it.)
 
-关于同一个公钥被多个私钥分别签名的情况，系统中也是允许的，相当于创建了多个同密码账户。
+Regarding the case where the same public key is separately signed by multiple private keys, it is also allowed in the system, which is equivalent to creating multiple accounts with the same password.
+
+## Currency system
+
+For a network system abstracted from the natural society, the currency system is obviously a very important and necessary subsystem. But a social network based on a decentralized account system obviously cannot rely on some kind of centralized currency. When it comes to a decentralized currency system, the first thing that comes to mind is necessarily built by the blockchain represented by Bitcoin. Point-to-point electronic money. This section mainly discusses the similarities and differences between the currency system constructed in the PDU and a completely independent currency system, and the way in which the currency system is constructed in the PDU.
+
+### Scope
+
+Currency in reality has a scope, usually a country or region will issue and circulate a certain currency. For example, you can use the US dollar in the United States, the euro in most parts of Europe, and the renminbi in China. Although major currencies such as the US dollar are recognized in many countries, they often need to be converted into local currencies during use. In addition to the scope of the region, the scope of time is usually ignored by us. Money hundreds of years ago is basically not recognized now, even if it may have higher value as a cultural relic.
+
+Before building a currency system in PDU, we need to make clear the following points:
+1. All information is based on messages, and messages are only valid in the time and space to which the message publisher belongs.
+2. For a blockchain-based currency system, the news of building its system is the release of each block.
+3. We consider a block valid only if all blocks can be continuously verified.
+
+It is easy to deduce from the above three points: ** A currency system composed of a blockchain has the scope of the space-time where all block producers are located and the space-time divided by it. **
+
+### Equity vesting
+
+One public key can generate multiple account addresses in the same space-time, and the messages of multiple account addresses are controlled by the same private key. The equity in the monetary system also belongs to the private key owner, which is equivalent to the equity belonging to all accounts controlled by this private key within the effective time and space. If the source of the ** message received by the miner is not considered, it can be considered in a broader sense that as long as the corresponding private key is possessed, the currency control right corresponding to the private key is possessed.
+
+### Anonymous transactions
+
+The account address corresponding to the currency system constructed in the PDU can also be different from the account address of the PDU, and only corresponds to a private key in a specific format, and the encryption method can be determined by the currency type. In this case, we treat the address as part of the message, not the PDU address. Signed transaction information can be published by any three parties. The specific steps are as follows:
+1. The charging party encrypts the address and information with the paying party's public key and sends it to the other party.
+2. The payer assembles the transaction as required and adds a signature.
+3. The payer sends the signed transaction to any third party for broadcast.
+4. The transaction is accepted, but other than the charging party and the paying party, other users can only understand the existence of the transaction through the information, but it is not clear which account the charging address (non-PDU address) belongs to.
+
+### Evolution of DPOS
+
+DPOS is a consensus mechanism adopted by blockchain projects such as EOS. Its essence is closer to the way in which transactions are handled in real society. Interested groups regularly elect representatives in a certain way, and these representatives handle the affairs in a relatively centralized manner. Stakeholder groups can monitor and regularly change their choices. In order to avoid being too centralized, the number of delegates and the operation mode are also specified in DPOS. Compared with the consensus mechanism of POW, its efficiency is higher.
+
+However, in a completely independent blockchain system, because there is no cost to create an account, in the election process, the measure of the number of votes is the amount of currency held (which can be weighted according to the holding time). However, the problem with this method of operation is that only the current holder of the currency can determine the generation of the representative, and the currency's liquidity and the stability of the representative will become contradictory. Potential users who hope to have a stable currency system cannot express their suggestions, and Short-term currency holders may not care about the long-term stability of the currency system.
+
+In the PDU, due to the introduction of account creation costs, the DPOS consensus can improve the fundamental issue of elections. The meaning is not to completely abandon the number of votes calculated by currency ownership. The process can arbitrarily select the optimal matching ratio on the straight line from one person, one vote to one yuan, one vote, and find a moderate equilibrium point. Or set up multiple different currency systems in the same time and space for users to choose.
+
+### POW compatible
+
+POW's block producers do not require identity verification, so any account can post the content of a block as a message. So whether it is to build a new POW consensus blockchain in a space-time or to introduce existing bitcoins (specifically the current bitcoin main chain, the longest chain), it only needs to satisfy all the regions on a chain Block messages that can be found (or considered to be found) in this space-time can be considered as valid for this chain.
+
 
 ## Network
 
 ### Network Model
 
-在PDU的系统中，用户的一切行为都是通过消息来实现的，而网络(Network)则是消息传播的路径选择。
+In the PDU system, all user actions are realized through messages, and the network (Network) is the path selection for message propagation.
 
-再进一步讨论之前，我们先需要明确时空对于账户和消息的影响。当一个账户a被创建时，其parents在cosign的过程中引用了几个时间证明，并被验证合法，则新账户存在且仅存在于这些时空当中，我们暂时称之为时空集合A。这个账户a所发布的每一条消息，都可以引用时空集合A中的全部或部分的时间证明作为引用，同时也可以同样存在于时空集合A中某一个或某几个时空的账户b所发消息作为时间证明。a甚至可以在自己的消息中引用和时空集合A无交集的账户c所发布的消息（*但这样做是毫无意义的，因为a并不存在于c所在的时空*）。可见，任何一个账户或者消息，都可能同时存在于多个时空当中，而属于多个时空的情况可以看作多个单一时空的叠加，而逐一进行处理。
+Before going any further, we need to be clear about the impact of time and space on accounts and news. When an account a is created, its parents reference several time proofs during the cosign process and are verified to be legal. The new account exists and only exists in these space-times. We temporarily call this space-time set A. Each message published by this account a can refer to all or part of the time certificate in the set of time and space A as a reference, and it can also exist in the message sent by account b in one or more of the time and space set A. As proof of time. a can even refer to the message published by account c that has no intersection with the space-time set A in its own message (* but this is meaningless because a does not exist in the space-time of c * ). It can be seen that any account or message may exist in multiple time and space at the same time, and the cases that belong to multiple time and space can be regarded as the superposition of multiple single time and space and processed one by one.
 
 #### Account Location
 
-在创建账户成功之后，根据创建消息可计算出一个哈希值（sha3-512)，作为账户的地址。而这个账户在其所有的合法存在的时空中，会共享这个地址。这个地址也会作为计算账户方位（Account Location）的基础，来影响信息的传播。
+After the account is created successfully, a hash value (sha3-512) can be calculated based on the creation message, which is used as the account address. And this account will share this address in all of its legal existence time and space. This address will also be used as the basis for calculating Account Location to affect the dissemination of information.
 
-在一个P2P的环境当中，每个账户都是完全平等的，并不存在本质上的区别，所以需要基于账户地址计算出账户在网络中的位置，以满足如下条件：
-1. 整个网络中的账户的位置是均匀分布的。
-2. 分布不存在中心，也不存在边界。
-3. 账户方位在一个有限的范围当中。
+In a P2P environment, each account is completely equal, and there is no essential difference. Therefore, the position of the account in the network needs to be calculated based on the account address to meet the following conditions:
+1. The positions of accounts in the entire network are evenly distributed.
+2. There is no center or boundary in the distribution.
+3. Account position is in a limited range.
 
-实现上述特性的最简单方式就是将低维的空间映射到高维空间的一个球面上，而维度与尺度都可以由每个账户自行选择。在网络传播过程之中，如果账户在维度不变的情况下，选择连续变化的尺度，则会看到一个逐步膨胀或收缩的高维空间，且临近位置的账户会随着空间的变化而移动。如果账户选择维度的变化或者不连续的尺度变化，则临近位置的账户会产生跳跃似的变化。
+The simplest way to achieve the above characteristics is to map a low-dimensional space to a sphere in a high-dimensional space, and the dimensions and scales can be selected by each account. In the process of network propagation, if the account has a constant dimension and chooses a continuously changing scale, you will see a high-dimensional space that gradually expands or contracts, and the nearby account will move with the change of space. . If the account selection dimension changes or the discontinuous scale changes, the account in the nearby location will have a jump-like change.
 
-例如：假设某账户的地址仅仅是一个十进制的数字2418，为计算他的位置，我们选择维度是2维。首先，可以将它投射到一个二维平面上，x轴坐标为24，y轴坐标为18。接下来选择球面的尺度，假设是最大周长为7的球面，则可以认为这个账户的地址映射到球面上（3，4）这个位置。我们可以按照同样的维度和尺度，计算出所有已知账户地址的位置，然后将我们之间坐标距离小于1的作为临近地址，来实现消息的传播。
+For example: Suppose that the address of an account is only a decimal number 2418. To calculate his position, we choose 2 dimensions. First, it can be projected onto a two-dimensional plane with x-axis coordinates of 24 and y-axis coordinates of 18. Next select the size of the sphere. Assuming a sphere with a maximum perimeter of 7, you can think that the address of this account is mapped to the position on the sphere (3, 4). We can calculate the positions of all known account addresses according to the same dimensions and scales, and then use the coordinate distance between us as less than 1 as the neighboring address to achieve the propagation of the message.
 
-上面举的是二维的例子，但在真实的应用中，我们可以选择更高的维度来进行位置计算。
-
-
-#### Message Distance
-
-消息的距离(Message Distance)同常被消息的接收方用来判断是否会进行根据临近账户的转发。（跟用户看到某条消息，觉得感兴趣，因而转发无关。）
-
-消息的距离^2 = sum(某个维度距离^2) - (vt)^2
-
-其中v可根据账户自己对于消息实时性的敏感度而设置。
-
-### Message Spread
-
-完整消息传播过程有如下几个步骤：
-1. 生产**消息内容**，并引用一条或多条其他的**消息**。（引用本账户消息可实现自身消息的有序，引用外部账户的消息可视为时间证明）
-2. 向建立连接的**临近账户**发送消息，也可以向指定目标的账户地址发送本条信息。
-3. 某账户地址收到消息后验证消息签名，如果签名的账户不在本地的DAG关系拓扑中，当前账户可以选择由其他账户地址请求信息完善自己的关系拓扑之后再处理本条消息，也可以直接放弃本条消息。（*转发其他账户的消息时，通常已经将此账户维护到自己的亲源关系拓扑当中，可响应其他账户关于相关亲源关系信息的请求。*）
-4. 对消息内容进行处理。
-5. 可选择的将消息对**临近账户**进行转发。
-
-如果在第4步中，发现某条消息违反自然法则的证据，则对于相关作恶的账户进行惩罚，如拒绝接受这个账户在此之后的消息，并广播作恶证据。也可以根据关系图谱处罚相关的其他账户的。
-
-## Timeline of PDU Evolution
-
-PDU账户系统的创建发展过程通常会经历一下的几个步骤：
-1. 构建创世文件，其中包含两个公钥（Adam，Eve），被认为是此PDU的账户系统拓扑图（DAG）的顶端，这两个账户的二元属性必须相异。
-2. 创建初始的N代账户，此过程中，Eve（也可以是Adam）发布时间证明事件，Adam和Eve及其N代之内的子账户，根据Eve发布的时间证明，在符合自然法则的条件下，构建一定数量的账户。
-3. 由上述的账户中某个账户开始启动一个稳定的时间证明服务器，以提供P2P环境下的最初时间证明服务，这是PDU的第一次分裂时空。在此之后，P2P环境中的用户就能够更方便的参与创建账户。
-4. 账户系统中账户总数的增速度由时间证明来控制，时间流速越慢，账户总数增速越慢。
-5. 出现多个不同时间流速的证明，PDU中产生时空分裂，用户按照自己的意愿选择时空（可同时符合多个时空）来创建新的账户，并使用。
-6. 多时空并存。
-
-待补充图……
-
-## Function Node
-
-一个节点（Node）通常指一个信息转发节点，跟账户没有硬性绑定的关系。一个账户可以同时通过多个节点来发布信息，一个节点也可以同时转发多个账户的信息；节点可以只提供单个时空的信息，也可以提供多个时空的信息。简单的说，我们所说的节点是一个可以响应请求提供消息的三方服务，类似于互联网中DNS服务。
-
-### Time Proof Node
-
-系统中会存在多个时间证明服务器节点，节点上可以保存多个不同流速的时间证明的完整信息。账户可以从服务器上获取自己所在时空的最新时间证明，加入自己的消息当中。也可以获取某个时空的历史时间证明，用以验证第三方信息的合法性。
-
-### Account Node
-
-针对单一或者多个时空，维护最新的，最完整的账户信息，包含合法的账户信息，收集账户的作恶证据等，帮助用户在接收到一个未知来源的消息时，完善本地的账户亲源关系拓扑图。
-
-### Tracker Node
-
-维护节点的当前状态，是否在线，监听端口等信息，使得用户可以在P2P的环境下直接跟对方进行交互。
-
-### Message Node
-
-收集和维护消息，每个消息节点都根据不同的主观意愿（算法）来决定自己所转发（广播）的消息内容。消息节点相当于当今互联网上的众多网站，区别是其中消息（内容）的归属权为消息生产者。
+The above example is a two-dimensional example, but in real applications, we can choose a higher dimension for position calculation.
 
 
+#### Message space-time distance
+
+The message distance (Message Distance) is usually used by the receiver of the message to determine whether it will be forwarded according to the nearby account. (It has nothing to do with the user seeing a message, and therefore interested in it.)
+
+Distance of message ^ 2 = sum (distance in a certain dimension ^ 2)-(vt) ^ 2
+
+Where v can be set according to the account's sensitivity to the real-time nature of the message.
+
+### Message Propagation
+
+The complete message propagation process has the following steps:
+1. Produce ** message content ** and quote one or more other ** messages **. (Using messages from this account can achieve ordering of its own messages, and messages from external accounts can be regarded as proof of time)
+2. Send a message to the established ** adjacent account **, or send this message to the account address of the specified target.
+3. An account address verifies the message signature after receiving the message. If the signed account is not in the local DAG relationship topology, the current account can choose to request information from other account addresses to improve its relationship topology before processing the message, or it can be abandoned This message. (* When forwarding messages from other accounts, this account is usually maintained in its own parent-source relationship topology, and can respond to other accounts' requests for related parent-source information. *)
+4. Process the message content.
+5. Optionally forward the message to ** Near Account ** .
+
+If in step 4 you find evidence of a message that violates the laws of nature, punish the relevant malicious account, such as refusing to accept subsequent messages from this account, and broadcast the evidence of evil. You can also punish other related accounts according to the relationship map.
+
+
+### Function Node
+
+A node usually refers to a message forwarding node, and there is no hard binding relationship with the account. An account can publish information through multiple nodes at the same time, and a node can also forward information from multiple accounts at the same time; a node can provide only a single spatiotemporal information, or it can provide multiple spatiotemporal information. Simply put, the node we are talking about is a three-party service that can provide messages in response to requests, similar to the DNS service in the Internet.
+
+#### Time Proof Node
+
+There will be multiple time certificate server nodes in the system, and the complete information of time certificates of multiple different flow rates can be stored on the nodes. The account can obtain the latest time certificate from the server and add it to its message. You can also obtain a historical time certificate of a certain time and space to verify the legitimacy of third-party information.
+
+#### Account Information Node
+
+Maintain the latest and most complete account information for one or more time and space, including legal account information, collect evil evidence of the account, etc., to help users improve the local account parent-source topology when receiving a message from an unknown source Illustration.
+
+#### Account Status Node
+
+Maintains the current status of the node, whether it is online, and listening port information, so that users can directly interact with each other in a P2P environment.
+
+#### Message Distribution Node
+
+Collect and maintain messages. Each message node determines the content of the message that it forwards (broadcasts) according to different subjective wishes (algorithms). A message node is equivalent to many websites on the Internet today. The difference is that the ownership of the message (content) is the message producer.
+
+
+## World Creation Process
+
+The process of creating and developing a PDU account system usually goes through the following steps:
+1. Create the genesis file, which contains two public keys (Adam, Eve) and is considered to be the top of the account system topology diagram (DAG) of this PDU. The binary attributes of these two accounts must be different.
+2. Create an initial N-generation account. During this process, Eve (also Adam) publishes time certification events. Adam and Eve and their sub-accounts within N generations, according to the time certification issued by Eve, are in line with the laws of nature. Under certain conditions, build a certain number of accounts.
+3. Starting from a certain account in the above account, a stable time proof server is started to provide the initial time proof service in the P2P environment. This is the first time division of PDU. After that, users in the P2P environment can more easily participate in creating accounts.
+4. The growth rate of the total number of accounts in the account system is controlled by the time proof. The slower the time flow rate, the slower the growth rate of the total number of accounts.
+5. There are multiple proofs of different time flow rates, and there is a spatiotemporal split in the PDU. The user chooses a spatiotemporal space (which can meet multiple spatiotemporals at the same time) to create new accounts and use it.
+6. Time and space coexist.
+
+To be added ...
 
 ## Conclusion
 
-本文中我们提出了一种基于中心化账户系统的社交网络的构想。通过时间证明的引入，直接或间接的给予P2P的网络上所有用户行为以成本。用户可以按照自己的意愿，选择自己所存在的网络时空。通过此种方式，我们将用户的身份及社交关系归还于用户本身，而非必须依存与某个特定的三方社交网络服务。
+In this paper, we propose a concept of a social network based on a decentralized account system. By orderly introducing time proof, all users on the P2P network are directly or indirectly given a cost. Users can choose their own network time and space according to their wishes. In this way, we return the user's identity and social relationship to the user itself, instead of having to rely on a particular three-party social network service.
 
-不同于以比特币为代表的去中心化数字加密货币，PDU并非用共识强制全网接收并维护唯一的一致数据，而是让用户按照自己的意愿去选择接收整个网络中对自己有意义的那部分信息。同时允许用户对作恶行为进行惩罚并传播证据信息。依靠DAG结构的亲源关系，甚至可以进行关联惩罚，进一步提高作恶成本。
- 
-一个已知的系统很难同时满足去中心化，效率及整体一致性，因为货币系统本身的特点，比特币选择了去中心化和整体信息的一致性，而根据信息传播的特点，PDU选择了去中心化和效率。我们认为在信息的传播过程中，单个节点无需实时获知全网的所有完整信息，也能够容忍由某账户恶意行为所产生的错误信息。
+Unlike the decentralized digital cryptocurrency represented by Bitcoin, PDUs do not use consensus to force the entire network to receive and maintain the only consistent data. Users can choose to receive the part of the entire network that is meaningful to them according to their own wishes. At the same time, it allows users to punish evil behaviors and disseminate evidence. Depending on the parental relationship of the DAG structure, association punishment can even be carried out, further increasing the cost of evil.
 
-
+A known system is difficult to meet decentralization, efficiency and overall consistency at the same time. Because of the characteristics of the currency system, Bitcoin chose decentralization and consistency of the overall information. According to the characteristics of information transmission, PDU chose Decentralization and efficiency. We believe that in the process of information dissemination, a single node does not need to know all the complete information of the entire network in real time, and can tolerate the wrong information generated by the malicious behavior of an account.
