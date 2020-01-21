@@ -9,7 +9,7 @@ This copy is translated by [Google Translate](https://translate.google.com/) [ä¸
 [![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
 [![Chat](https://img.shields.io/badge/gitter-Docs%20chat-4AB495.svg)](https://gitter.im/pdupub/Welcome)
 
-** Abstract: ** Social network services (SNS), such as Facebook, twitter, and WeChat etc, which users can create identities on the platform, maintain connections and exchange information with each other. However, those SNS rely on a centralized network service provided by the company or organization, which makes it easy to be controlled or blocked. The BitTorrent protocol can implement P2P information exchange, but its original purpose is to improve the transmission efficiency of known data, and its weakened account system design is not suitable for uncertain information exchange. For a decentralized system, even if a digital signature can prove the source of each information, due to the lack of third-party verification (such as mobile phone number registration) to give account creation costs, the useless information will flood the entire network easily, the information source cannot be punished.
+**Abstract:** Social network services (SNS), such as Facebook, twitter, and WeChat etc, which users can create identities on the platform, maintain connections and exchange information with each other. However, those SNS rely on a centralized network service provided by the company or organization, which makes it easy to be controlled or blocked. The BitTorrent protocol can implement P2P information exchange, but its original purpose is to improve the transmission efficiency of known data, and its weakened account system design is not suitable for uncertain information exchange. For a decentralized system, even if a digital signature can prove the source of each information, due to the lack of third-party verification (such as mobile phone number registration) to give account creation costs, the useless information will flood the entire network easily, the information source cannot be punished.
 
 We propose a way to make sure account creation costs in a pure P2P environment, and based on this account system, build a complete P2P social network. First, we construct an order by reference to prove that a particular behavior occurs after a certain behavior, that is time proof. Then, the time interval between the creation of a new account must be jointly confirmed by multiple existing legal accounts and such confirmation of the same account must be met. Users (including non-users) of each account system can maintain the relationship topology between some or all of the accounts of the DAG structure. new accounts can be verified at any time based on the information they have learned. Evil acts punish certain accounts and related accounts. Users do not need to agree on all behaviors, nor do they need to maintain consistent information.
 
@@ -66,9 +66,9 @@ In essence, the root of this problem is that the user group itself cannot form a
 
 We propose a new type of social network (PDU) based on a decentralized account system, which also excludes third-party centralized services. Instead, we hope that through the implementation of the decentralized account system (DID), the user identity can be The confirmation and relationship topology is separated from a specific platform to eliminate the user's dependence on a specific third-party centralized service, so that the user's identity and social relationships truly belong to the user.
 
-Just as ** double spend ** can be considered as the fundamental problem to be solved in a decentralized currency system, the fundamental problem to be solved in a decentralized account system is how to give the necessary ** costs ** to account creation, so that Its controllable.
+Just as **double spend** can be considered as the fundamental problem to be solved in a decentralized currency system, the fundamental problem to be solved in a decentralized account system is how to give the necessary **costs** to account creation, so that Its controllable.
 
-We modeled nature and society, first introduced the concept of time proof, and based on this we formulated the laws of nature. New accounts created in accordance with the laws of nature may be accepted by other users (some users) in the system. Each user can use the structure of a directed acyclic graph (DAG) to maintain all the users he ** recognizes ** and the parent-source topological relationship they constitute. Any message that violates the laws of nature will be transmitted as evidence in the network, allowing the message receiver to punish the malicious user according to the local source-source topology. The depth and breadth of the source of the punishment account shall be determined by the recipient.
+We modeled nature and society, first introduced the concept of time proof, and based on this we formulated the laws of nature. New accounts created in accordance with the laws of nature may be accepted by other users (some users) in the system. Each user can use the structure of a directed acyclic graph (DAG) to maintain all the users he **recognizes** and the parent-source topological relationship they constitute. Any message that violates the laws of nature will be transmitted as evidence in the network, allowing the message receiver to punish the malicious user according to the local source-source topology. The depth and breadth of the source of the punishment account shall be determined by the recipient.
 
 Different from the traditional centralized service account system, the natural law of PDU also defines the life cycle of the account based on time proof, so that unused accounts can be naturally eliminated, and the total number of accounts increases linearly. ), And the number of users in the current life cycle will be approximately constant.
 
@@ -82,7 +82,7 @@ Accounts (and their users) can and can only implement all network behaviors in t
 
 Whether each message can be accepted by an account (different from the information received, acceptance means that the received information is verified and considered legal) is entirely up to the recipient. Therefore, each account constructs the entire PDU network from its perspective through the selection of the received information. In other words, the range of information accepted by the account itself determines the time and space of the account.
 
-The content of a message can contain one or more other messages, or even multiple levels of nesting, which we call ** references ** .
+The content of a message can contain one or more other messages, or even multiple levels of nesting, which we call **references** .
 
 ### Message Credit
 
@@ -133,7 +133,7 @@ However, due to the easy creation of asymmetric key pairs as the basis of identi
 
 ### Family relationship
 
-The parent-child relationship refers to the relationship between two accounts. In the PDU, all legal accounts of ** single space-time ** recognized by each node have direct or indirect parent-child relationships. With the exception of the two genesis accounts, all accounts have and only two parent accounts with different attributes. The relationship topology formed by the entire account system is a directed acyclic graph (DAG) initiated by two genesis endpoints
+The parent-child relationship refers to the relationship between two accounts. In the PDU, all legal accounts of **single space-time** recognized by each node have direct or indirect parent-child relationships. With the exception of the two genesis accounts, all accounts have and only two parent accounts with different attributes. The relationship topology formed by the entire account system is a directed acyclic graph (DAG) initiated by two genesis endpoints
 
 ### Life cycle
 
@@ -145,17 +145,17 @@ The length of the life cycle is related to the parent account, but it is not low
 ### The Law of Nature
 
 1. Each account has a binary attribute. The attribute value is determined by the end parity of its public key. The two accounts of creation must be different attribute accounts.
-(* This provision means that users can choose this binary attribute by repeating the process of generating asymmetric key pairs. The secondary binary attribute of this account system will not approach uniformity, because when one party becomes rare At this time, due to the signature rules of the parent address, more rare addresses will be selected to increase their account value. *)
+(*This provision means that users can choose this binary attribute by repeating the process of generating asymmetric key pairs. The secondary binary attribute of this account system will not approach uniformity, because when one party becomes rare At this time, due to the signature rules of the parent address, more rare addresses will be selected to increase their account value.*)
 2. Each newly created asymmetric key needs to undergo a signing process, be signed by two legally different attribute account lines, and then broadcast to the entire P2P network before it can be recognized by other accounts.
 3. The parent address of the signature execution must have experienced at least 1/4 of the minimum lifetime before the timestamp contained in the signature.
-4. The parent address of the signature execution must have at least 1/4 of the ** minimum life cycle ** before the time stamp included in the signature, and no other new account signatures have been created.
+4. The parent address of the signature execution must have at least 1/4 of the **minimum life cycle** before the time stamp included in the signature, and no other new account signatures have been created.
 5. The two signature accounts with different attributes are signed before and after, and the content of the second signature must include the first signature.
-(* The order of signatures of two different attribute parent addresses is not enforced for the time being, but it may be expanded in the definition of natural law in the future to further increase the cost of creating an account *)
+(*The order of signatures of two different attribute parent addresses is not enforced for the time being, but it may be expanded in the definition of natural law in the future to further increase the cost of creating an account*)
 6. The length of the life cycle is related to the parent account, which can be defined as 1/2 of the account with a longer life cycle in the parent account, but not less than the minimum life cycle.
-(* The setting of the life cycle is conducive to the expansion of the system account through the control of the time-proven flow rate at the beginning of the entire system. At the same time, when the system account reaches a certain number, the number of all currently active accounts is controlled. * )
+(*The setting of the life cycle is conducive to the expansion of the system account through the control of the time-proven flow rate at the beginning of the entire system. At the same time, when the system account reaches a certain number, the number of all currently active accounts is controlled.*)
 7. The life cycle of a child account is calculated from the completion of the signature on the second parent account that executes the signature, the proof of time contained in the account.
 8. Two parent addresses performing signatures cannot be direct or indirect parent-child relationship accounts.
-(* Introduced this algorithm into the calculation of the account's public address, but it can also be understood as, in the process of creating a new account, we must introduce new genes. * )
+(*Introduced this algorithm into the calculation of the account's public address, but it can also be understood as, in the process of creating a new account, we must introduce new genes.*)
 
 The behavior generated by the signature also belongs to the general message (Message), and its form, transmission method and trustworthiness are the same as the message.
 
@@ -186,11 +186,11 @@ Before building a currency system in PDU, we need to make clear the following po
 2. For a blockchain-based currency system, the news of building its system is the release of each block.
 3. We consider a block valid only if all blocks can be continuously verified.
 
-It is easy to deduce from the above three points: ** A currency system composed of a blockchain has the scope of the space-time where all block producers are located and the space-time divided by it. **
+It is easy to deduce from the above three points: **A currency system composed of a blockchain has the scope of the space-time where all block producers are located and the space-time divided by it.**
 
 ### Equity vesting
 
-One public key can generate multiple account addresses in the same space-time, and the messages of multiple account addresses are controlled by the same private key. The equity in the monetary system also belongs to the private key owner, which is equivalent to the equity belonging to all accounts controlled by this private key within the effective time and space. If the source of the ** message received by the miner is not considered, it can be considered in a broader sense that as long as the corresponding private key is possessed, the currency control right corresponding to the private key is possessed.
+One public key can generate multiple account addresses in the same space-time, and the messages of multiple account addresses are controlled by the same private key. The equity in the monetary system also belongs to the private key owner, which is equivalent to the equity belonging to all accounts controlled by this private key within the effective time and space. If the source of the message received by the miner is not considered, it can be considered in a broader sense that as long as the corresponding private key is possessed, the currency control right corresponding to the private key is possessed.
 
 ### Anonymous transactions
 
@@ -248,11 +248,11 @@ Where v can be set according to the account's sensitivity to the real-time natur
 ### Message Propagation
 
 The complete message propagation process has the following steps:
-1. Produce ** message content ** and quote one or more other ** messages **. (Using messages from this account can achieve ordering of its own messages, and messages from external accounts can be regarded as proof of time)
-2. Send a message to the established ** adjacent account **, or send this message to the account address of the specified target.
+1. Produce **message content** and quote one or more other **messages**. (Using messages from this account can achieve ordering of its own messages, and messages from external accounts can be regarded as proof of time)
+2. Send a message to the established **adjacent account**, or send this message to the account address of the specified target.
 3. An account address verifies the message signature after receiving the message. If the signed account is not in the local DAG relationship topology, the current account can choose to request information from other account addresses to improve its relationship topology before processing the message, or it can be abandoned This message. (* When forwarding messages from other accounts, this account is usually maintained in its own parent-source relationship topology, and can respond to other accounts' requests for related parent-source information. *)
 4. Process the message content.
-5. Optionally forward the message to ** Near Account ** .
+5. Optionally forward the message to **Near Account** .
 
 If in step 4 you find evidence of a message that violates the laws of nature, punish the relevant malicious account, such as refusing to accept subsequent messages from this account, and broadcast the evidence of evil. You can also punish other related accounts according to the relationship map.
 
