@@ -1,6 +1,6 @@
 # PDU - A decentralized identity-based social network
 
-This copy is translated by [Google Translate](https://translate.google.com/) [中文白皮书](https://github.com/pdupub/Documentation/blob/master/zh-CN/WhitePaper.md)
+This copy is translated by [Google Translate](https://translate.google.com/) from [中文白皮书](https://github.com/pdupub/Documentation/blob/master/zh-CN/WhitePaper.md).
 
 * email: hello@pdu.pub
 * wechat: pengpengt00
