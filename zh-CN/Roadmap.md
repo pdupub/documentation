@@ -7,7 +7,7 @@ PDU.PUB 路线图
 
 基本数据结构及基础操作，账户的创建，消息的构建，亲缘拓扑，在console中实现。
 
-已经完成 [go-pud](https://github.com/pdupub/go-pdu)
+已经完成 [go-pdu](https://github.com/pdupub/go-pdu)
 
 # 阶段 2 - 最简化可运行网络 - 阶段1+3个月
 
