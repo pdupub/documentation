@@ -13,7 +13,7 @@ PDU.PUB 路线图
 
 构建消息传播网络，构建运行在server上的固定节点和简易。
 
-进行中 [go-pud](https://github.com/pdupub/go-pdu)
+进行中 [go-pdu](https://github.com/pdupub/go-pdu)
 # 阶段 3 - 完整实现网络及消息传播网络及P2P货币系统 - 阶段2+6个月
 
 多个功能节点的开发及客户端网络
