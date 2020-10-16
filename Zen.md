@@ -1,7 +1,6 @@
-### Sequence comes from reference.
+**Why speed of light is a constant? WE CHOOSE LIGHT as ruler.**
 
-### Spacetime is decided by yourself.
-
-### Time flows like a river.
-
-### Finite Life, infinite growth.
+~~Sequence comes from reference.
+Spacetime is decided by yourself.
+Time flows like a river. 
+Finite Life, infinite growth.~~
