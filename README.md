@@ -6,7 +6,7 @@ Parallel Digital Universe - A decentralized identity-based social network
 - English v2
 - [Chinese v2](zh-CN/WhitePaperV2.md) 
 
-- [English v1](WhitePaperV1.md) [Chinese v1](zh-CN/WhitePaperV1.md)
+- old version: [English](WhitePaperV1.md) [Chinese](zh-CN/WhitePaperV1.md)
 
 ## Roadmap
 - English
