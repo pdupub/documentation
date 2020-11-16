@@ -4,6 +4,7 @@
 4. An individual only accepts messages published by any individual from its creation to a specific time, and this is called its life length.
 5. The initial state of the system must contain limited individuals. Related subsequent systems are split from the initial system by changing time. The subsequent systems include individuals in the original system and inherit the remainder of their life length.
 6. Individuals can choose orderly messages published by any individual including themselves as the time.
-7. The time of the message is expressed by the quoted specific time, which can prove that the message occurred after a that time.
+7. The time of the message is expressed by the directly or indirectly quoted specific time, which can prove that the message occurred after a that time.
+8. Individuals can post specific messages to express the end of their life length.
 
 <a href="https://pdu.pub"><img height="32" align="right" src="https://pdu.pub/images/icon.svg"></a>
