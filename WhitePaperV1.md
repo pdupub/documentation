@@ -1,4 +1,4 @@
-# PDU - A decentralized identity-based social network
+# PDU - A decentralized identity-based social network (version 1)
 
 This copy is translated by [Google Translate](https://translate.google.com/) from [中文白皮书](https://github.com/pdupub/Documentation/blob/master/zh-CN/WhitePaper.md).
 
