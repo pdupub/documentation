@@ -1,3 +1,14 @@
+## Zen of PDU
+
+#### release 0.2.1
+
+1. Events form the Partially ordered set by direct or indirect influence.
+2. Any series of events with a total order can be used as time.
+3. The system is based on the individual's subjective choice.
+4. The limited rate of change of the system depends on the event cost.
+
+#### release 0.2.0
+
 1. The system consists of individuals who choose the same time。
 2. Individuals can arbitrarily choose the creation cost and life length they accept.
 3. New individuals in the system are created by existing individuals through specific messages, and the time interval for publishing the creating messages can be used to measure the creation cost.
