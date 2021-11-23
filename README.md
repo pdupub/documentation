@@ -4,7 +4,7 @@ Parallel Digital Universe - A decentralized identity-based social network
 [![Chat](https://img.shields.io/badge/gitter-Docs%20chat-4AB495.svg)](https://gitter.im/pdupub/Welcome)
 
 ## General Psychohistory
-- [中文](GeneralPsychohistory.md)
+- [中文](zh-CN/GeneralPsychohistory.md)
 
 ## PDU White Paper
 - English v2
