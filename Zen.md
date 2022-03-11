@@ -1,5 +1,12 @@
 ## Zen of PDU
 
+#### release 0.3
+
+1. Events determine partial order relationships through directed associations.
+2. Homologous fully sequenced events can constitute a single individual.
+3. The composition of groups arises from the self-identification of individuals.
+4. The system world is determined by the subjective choices of individuals.
+
 #### release 0.2.1
 
 1. Events form the Partially ordered set by direct or indirect influence.
